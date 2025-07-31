@@ -61,9 +61,6 @@ class TestUrbanRoutes:
         routes_page.click_add_card()
         time.sleep(2)
         routes_page.set_card(data.CARD_NUMBER, data.CARD_CODE)
-        routes_page.click_link_active()
-        routes_page.click_link_button()
-        routes_page.click_close_button()
         assert routes_page.verify_card() == 'Card'
 
     def test_comment_for_driver(self):

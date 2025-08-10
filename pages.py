@@ -1,4 +1,3 @@
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -11,7 +10,7 @@ class UrbanRoutesPage:
     FROM_LOCATOR = (By.ID, 'from')
     TO_LOCATOR = (By.ID, 'to')
     TAXI_BUTTON_LOCATOR = (By.XPATH, '//button[@type="button" and @class="button round"]')
-    SUPPORTIVE_PLAN_LOCATOR = (By.XPATH, '//div[@class="tcard" and contains(.,"Supportive")]')
+    SUPPORTIVE_PLAN_LOCATOR = (By.XPATH, '//div[contains(text(), "Supportive")]//..')
     VERIFY_SUPPORTIVE_PLAN_LOCATOR = (By.XPATH, '//div[@class="tcard active"]')
     PHONE_NUMBER_LOCATOR = (By.XPATH, "//div[@class='np-button']")
     PHONE_NUMBER_INPUT_LOCATOR = (By.ID, 'phone')
@@ -51,7 +50,12 @@ class UrbanRoutesPage:
         return self.driver.find_element(*self.TO_LOCATOR).get_attribute("value")
 
     def click_taxi_button(self):
-        self.driver.find_element(*self.TAXI_BUTTON_LOCATOR).click()
+        if (self.driver.find_element(*self.SUPPORTIVE_PLAN_LOCATOR).get_attribute("class")
+                != "tcard active"):
+            card = WebDriverWait(self.driver, 3).until(
+                EC.visibility_of_element_located(self.SUPPORTIVE_PLAN_LOCATOR))
+            self.driver.execute_script("arguments[0].scrollIntoView();", card)
+            card.click()
 
     def click_supporting_plan_button(self):
         self.driver.find_element(*self.SUPPORTIVE_PLAN_LOCATOR).click()

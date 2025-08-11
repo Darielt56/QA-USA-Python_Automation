@@ -50,15 +50,15 @@ class UrbanRoutesPage:
         return self.driver.find_element(*self.TO_LOCATOR).get_attribute("value")
 
     def click_taxi_button(self):
+        self.driver.find_element(*self.TAXI_BUTTON_LOCATOR).click()
+
+    def click_supporting_plan_button(self):
         if (self.driver.find_element(*self.SUPPORTIVE_PLAN_LOCATOR).get_attribute("class")
                 != "tcard active"):
             card = WebDriverWait(self.driver, 3).until(
                 EC.visibility_of_element_located(self.SUPPORTIVE_PLAN_LOCATOR))
             self.driver.execute_script("arguments[0].scrollIntoView();", card)
             card.click()
-
-    def click_supporting_plan_button(self):
-        self.driver.find_element(*self.SUPPORTIVE_PLAN_LOCATOR).click()
 
     def verify_supporting_plan(self):
         return self.driver.find_element(*self.VERIFY_SUPPORTIVE_PLAN_LOCATOR).get_attribute("class")
